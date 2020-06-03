@@ -90,7 +90,7 @@ def general(request, tab_slug=None):
 
 
 def model_fields_formatter(fields, data):
-    return tuple([str(getattr(data, f)) for f in fields])
+    return tuple(str(getattr(data, f)) for f in fields)
 
 
 #@cache_page(ONE_DAY)
@@ -128,11 +128,14 @@ def requester_details(request, requester_id):
         def row_formatter(input):
 
             for cc in input:
-                row = []
-                row.append('<a href="{}">{}</a>'.format(
-                           reverse('hit_group_details',
-                           kwargs={'hit_group_id': cc[3]}), cc[0]))
-                row.extend(cc[1:3])
+                row = [
+                    '<a href="{}">{}</a>'.format(
+                        reverse('hit_group_details', kwargs={'hit_group_id': cc[3]}),
+                        cc[0],
+                    ),
+                    *cc[1:3],
+                ]
+
                 yield row
 
         requester_name = HitGroupContent.objects.filter(

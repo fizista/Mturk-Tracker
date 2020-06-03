@@ -57,7 +57,7 @@ class Pid(object):
                     kill(old_pid, 0)
                     logger.info('process %s (%s) still exists' % (old_pid, name))
                     sleep(60)
-                    tries = tries + 1
+                    tries += 1
                     if tries < 10:
                         continue
                     else:

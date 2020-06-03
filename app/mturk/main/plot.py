@@ -18,9 +18,7 @@ def repair(data, is_anomaly, fixer=None, depth=1):
     given list, but you shouldn't care for large amount of data anyway.
     """
 
-    iterators = []
-    for i in range(depth * 2 + 1):
-        iterators.append(itertools.islice(data, i, None))
+    iterators = [itertools.islice(data, i, None) for i in range(depth * 2 + 1)]
     items_iter = itertools.izip(*iterators)
 
     for items in items_iter:
@@ -34,9 +32,7 @@ def repair(data, is_anomaly, fixer=None, depth=1):
 
 
 def vrepair(data, anomalies, fixer=None, depth=1):
-    iterators = []
-    for i in range(depth * 2 + 1):
-        iterators.append(itertools.islice(data, i, None))
+    iterators = [itertools.islice(data, i, None) for i in range(depth * 2 + 1)]
     items_iter = itertools.izip(*iterators)
 
     for items in items_iter:

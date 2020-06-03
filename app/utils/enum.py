@@ -76,15 +76,12 @@ class EnumMetaclass(type):
         """
         if not name.isupper():
             return False
-        for vtype in cls.ENUM_VALUE_TYPES:
-            if isinstance(val, vtype):
-                return True
-        return False
+        return any(isinstance(val, vtype) for vtype in cls.ENUM_VALUE_TYPES)
 
     def __new__(cls, name, bases, d):
-        names = dict()
+        names = {}
         values = []
-        trans_names = dict()
+        trans_names = {}
         for x in d:
             if cls.is_enum_variable(x, d[x]):
                 names[d[x]] = x

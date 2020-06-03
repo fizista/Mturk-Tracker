@@ -16,9 +16,8 @@ def doc_parts(input_string):
     """
     # hide warnings
     settings_overrides = {} if settings.DEBUG else {'report_level': 'quiet'}
-    parts = core.publish_parts(source=input_string, writer_name='html',
-        settings_overrides=settings_overrides)
-    return parts
+    return core.publish_parts(source=input_string, writer_name='html',
+            settings_overrides=settings_overrides)
 
 
 @cache_page(10 * 60)

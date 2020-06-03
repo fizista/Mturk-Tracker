@@ -72,8 +72,8 @@ def reload():
             if res.return_code != 0:
                 show(yellow("Supervisor unavailable, starting new process."))
                 res = start_supervisor()
-                if res.return_code != 0:
-                    show(red("Error starting supervisor!."))
+            if res.return_code != 0:
+                show(red("Error starting supervisor!."))
 
 
 def shutdown():

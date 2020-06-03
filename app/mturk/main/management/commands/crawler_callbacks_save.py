@@ -47,8 +47,7 @@ def callback_database(data, **kwargs):
                         [model.__class__.__name__]).__getattribute__(model.__class__.__name__)
 
         try:
-            obj = clazz.objects.get(**fields)
-            return obj
+            return clazz.objects.get(**fields)
         except clazz.MultipleObjectsReturned:
             model.save()
             return model

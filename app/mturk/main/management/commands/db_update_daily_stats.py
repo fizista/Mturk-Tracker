@@ -23,81 +23,81 @@ class Command(BaseCommand):
     help = 'Calculates daily stats'
 
     def handle(self, **options):
-        """Updates daily stats by reducing hitgroups_posted and
+            """Updates daily stats by reducing hitgroups_posted and
         hitgroups_consumed of CrawAggregates occuring that day.
 
         """
-        commit_every = 100
-        crawl = get_first_crawl()
-        if not crawl:
-            log.error("No crawls to process.")
-            return
+            commit_every = 100
+            crawl = get_first_crawl()
+            if not crawl:
+                log.error("No crawls to process.")
+                return
 
-        transaction.enter_transaction_management()
-        transaction.managed(True)
-        updates, creates = (0, 0)
+            transaction.enter_transaction_management()
+            transaction.managed(True)
+            updates, creates = (0, 0)
 
-        start, end = (crawl.start_day(), datetime.date.today())
-        days = (end - start).days
-        log.info("Processing {0} to {1} ({2} days).".format(start, end, days))
-        i = 0
+            start, end = (crawl.start_day(), datetime.date.today())
+            days = (end - start).days
+            log.info("Processing {0} to {1} ({2} days).".format(start, end, days))
+            i = 0
 
-        for i in range(0, days):
+            for i in range(days):
 
-            day = date_to_aware_utc_datetime(
-                crawl.start_day() + datetime.timedelta(days=i))
+                    day = date_to_aware_utc_datetime(
+                        crawl.start_day() + datetime.timedelta(days=i))
 
-            day_end = day + datetime.timedelta(days=1)
+                    day_end = day + datetime.timedelta(days=1)
 
-            # excluding objects having zero
-            aggregates = CrawlAgregates.objects.filter(
-                start_time__gte=day, start_time__lt=day_end
-                ).filter(Q(hits_posted__gt=0) |
-                         Q(hits_consumed__gt=0) |
-                         Q(rewards_posted__gt=0) |
-                         Q(rewards_consumed__gt=0))
+                    # excluding objects having zero
+                    aggregates = CrawlAgregates.objects.filter(
+                        start_time__gte=day, start_time__lt=day_end
+                        ).filter(Q(hits_posted__gt=0) |
+                                 Q(hits_consumed__gt=0) |
+                                 Q(rewards_posted__gt=0) |
+                                 Q(rewards_consumed__gt=0))
 
-            if len(aggregates) == 0:
-                log.info("No crawl aggregates for %s." % day)
-                continue
+                    if len(aggregates) == 0:
+                        log.info("No crawl aggregates for %s." % day)
+                        continue
 
-            res = [0, 0, 0, 0]
-            for a in aggregates:
-                for i, at in enumerate(['hits_posted', 'rewards_posted',
-                    'hits_consumed', 'rewards_consumed']):
-                    res[i] += getattr(a, at) or 0
-            values = {}
-            for i, k in enumerate(['arrivals', 'arrivals_value', 'processed',
-                'processed_value']):
-                values[k] = res[i]
+                    res = [0, 0, 0, 0]
+                    for a in aggregates:
+                        for i, at in enumerate(['hits_posted', 'rewards_posted',
+                            'hits_consumed', 'rewards_consumed']):
+                            res[i] += getattr(a, at) or 0
+                    values = {}
+                    for i, k in enumerate(['arrivals', 'arrivals_value', 'processed',
+                        'processed_value']):
+                        values[k] = res[i]
 
-            obj, created = DayStats.objects.get_or_create(
-                date=day, defaults=values)
+                    obj, created = DayStats.objects.get_or_create(
+                        date=day, defaults=values)
 
-            if not created:
-                updated = False
-                for k, v in values.iteritems():
-                    if (v is not None and
-                        round(getattr(obj, k), 4) != round(v, 4)):
-                        setattr(obj, k, v)
-                        updated = True
-                if updated:
-                    obj.save()
-                    updates += 1
-            else:
-                creates += 1
+                    if created:
+                            creates += 1
 
-            if i % commit_every == 0:
+                    else:
+                            updated = False
+                            for k, v in values.iteritems():
+                                    if not (v is None or round(getattr(obj, k),
+                                                               4) == round(v, 4)):
+                                            setattr(obj, k, v)
+                                            updated = True
+                            if updated:
+                                obj.save()
+                                updates += 1
+                    if i % commit_every == 0:
+                        log.info('{0}/{1} days processed, commiting.'.format(i, days))
+                        transaction.commit()
+
+            # commit the missing records
+            if i % commit_every != 0:
                 log.info('{0}/{1} days processed, commiting.'.format(i, days))
                 transaction.commit()
 
-        # commit the missing records
-        if i % commit_every != 0:
-            log.info('{0}/{1} days processed, commiting.'.format(i, days))
-            transaction.commit()
-
-        log.info('DayStat refresh finished: {0}/{1}/{2} created/updated/total '
-            'objects.'.format(creates, updates, days))
+            log.info('DayStat refresh finished: {0}/{1}/{2} created/updated/total '
+                'objects.'.format(creates, updates, days))
 
 
 def date_to_aware_utc_datetime(dt):

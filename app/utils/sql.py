@@ -83,11 +83,7 @@ def get_table_columns(table_name, with_data_type=False):
         "information_schema.columns where table_name='%s'" % (
             ', data_type' if with_data_type else '',
             table_name))
-    if with_data_type:
-        items = dict(qq)
-    else:
-        items = [q[0] for q in qq]
-    return items
+    return dict(qq) if with_data_type else [q[0] for q in qq]
 
 
 def table_exists(table_name):

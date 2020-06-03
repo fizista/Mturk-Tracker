@@ -47,7 +47,7 @@ def cset(name, value, force=False):
 
 def print_context():
     show("Current configuration ")
-    pprint(dict((k, v) for k, v in env["ctx"].items() if v is not None))
+    pprint({k: v for k, v in env["ctx"].items() if v is not None})
     show("Target: %s" % colors.green(env["host"]))
     show("Instance: %s" % colors.green(cget("instance")))
     show("Branch: %s" % colors.green(cget("branch") or "master"))

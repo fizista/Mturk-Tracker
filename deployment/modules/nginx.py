@@ -38,10 +38,10 @@ def configure():
                 source, destination, context, mode="644")
     enabled = cget("nginx_sites_enabled")
     with settings(hide("running", "stderr", "stdout"), sudo_prefix=SUDO_PREFIX,
-        warn_only=True):
+            warn_only=True):
         show("Enabling sites: {}.".format(enabled))
+        available = '/etc/nginx/sites-available'
         for s in enabled:
-            available = '/etc/nginx/sites-available'
             enabled = '/etc/nginx/sites-enabled'
             ret = sudo("ln -s {available}/{site} {enabled}/{site}".format(
                 available=available, enabled=enabled, site=s))

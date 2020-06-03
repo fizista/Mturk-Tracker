@@ -189,8 +189,8 @@ class NaiveBayesClassifier(DocumentClassifier):
                 probability[label] = probability.get(label, self.EPSILON)
             for label in probability:
                 result[label] = result.get(label, 0) + log(probability[label])
-        for label in result:
-            result[label] += log(prior[label])
+        for label, value in result.items():
+            value += log(prior[label])
         if not result:
             result = {NOLABEL: 0.0}
         return {"document": document, "probabilities": result}
@@ -232,10 +232,10 @@ class NaiveBayesClassifier(DocumentClassifier):
                 posterior[keyword] = probability
                 self.increment(occurrences, keyword)
         # Divide each occurrences number to get probability value.
-        for keyword in posterior:
+        for keyword, value in posterior.items():
             for label in posterior[keyword]:
-                posterior[keyword][label] /= float(occurrences[keyword])
+                value[label] /= float(occurrences[keyword])
         num_labels = sum(prior.values())
-        for label in prior:
-            prior[label] /= float(num_labels)
+        for label, value_ in prior.items():
+            value_ /= float(num_labels)
         return prior, posterior

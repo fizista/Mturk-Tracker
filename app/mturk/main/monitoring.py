@@ -106,4 +106,4 @@ def convert_date_to_aware_utc_datetime(dt):
 
 def datetime_range(start=now(), period=1, periods=30):
     return [convert_date_to_aware_utc_datetime(
-        start - datetime.timedelta(days=period * x)) for x in range(0, periods)]
+            start - datetime.timedelta(days=period * x)) for x in range(periods)]

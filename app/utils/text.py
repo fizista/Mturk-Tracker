@@ -19,14 +19,12 @@ def calculate_similarity(text1, text2):
         if l not in t1:
             sum.append(l)
 
-    coefficient = float(len(intersection)) / float(len(sum))
-
-    return coefficient
+    return float(len(intersection)) / float(len(sum))
 
 
 def fuse(array, separator):
 
-    if type(array) != type([]) and type(array) != type(()):
+    if type(array) not in [type([]), type(())]:
         raise Exception('Fused object must be a list or a tuple.')
 
     if type(separator) != type(''):
@@ -36,7 +34,7 @@ def fuse(array, separator):
     if array_length > 1:
 
         result = ''
-        for i in range(0, array_length):
+        for i in range(array_length):
             result += array[i]
             if i < array_length - 1:
                 result += separator

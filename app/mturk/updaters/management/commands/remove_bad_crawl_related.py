@@ -175,7 +175,7 @@ class Command(BaseCommand):
             items.append(crawl_id)
             if len(items) == chunk_size:
                 yield items
-                items = list()
+                items = []
         if items:
             yield items
 

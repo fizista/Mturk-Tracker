@@ -45,12 +45,8 @@ class CalculateClassAggregates(BaseCommand):
         end = options["end"]
 
         # If the end of the time interval is not specified compute aggregates
-        # up to now.
-        if end is None:
-            end = datetime.now()
-        else:
-            end = parse(end)
-
+            # up to now.
+        end = datetime.now() if end is None else parse(end)
         # If the begining of the time interval is not specified compute
         # from last existing aggregates.
         if begin is None:

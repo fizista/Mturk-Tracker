@@ -32,7 +32,7 @@ def create_virtualenv():
     user = cget("user")
     ve_dir = cget("virtualenv_dir")
     bin_path = pjoin(ve_dir, "bin")
-    if not dir_exists(bin_path) or not exists(pjoin(bin_path, "activate")):
+    if not (dir_exists(bin_path) and exists(pjoin(bin_path, "activate"))):
         show(yellow("Setting up new Virtualenv in: %s"), ve_dir)
         with settings(hide("stdout", "running"), sudo_prefix=SUDO_PREFIX):
             sudo("virtualenv --distribute %s" % ve_dir, user=user)

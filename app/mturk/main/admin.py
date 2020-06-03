@@ -28,20 +28,19 @@ def _hitgroup_content_to_sorl_dt(hg):
     """Convert given HitGroupContent object into valid solr dictionary, that
     can be added to index using at least pysolr.Solr connection
     """
-    doc = {
-        'group_id': hg.group_id,
-        'requester_id': hg.requester_id,
-        'requester_name': hg.requester_name,
-        'reward': hg.reward,
-        'content': strip_tags(hg.html),
-        'description': strip_tags(hg.description),
-        'title': hg.title,
-        'keywords': [k.strip() for k in hg.keywords.split(',')],
-        'qualifications': hg.qualifications,
-        'occurrence_date': hg.occurrence_date,
-        'time_alloted': hg.time_alloted,
-    }
-    return doc
+    return {
+            'group_id': hg.group_id,
+            'requester_id': hg.requester_id,
+            'requester_name': hg.requester_name,
+            'reward': hg.reward,
+            'content': strip_tags(hg.html),
+            'description': strip_tags(hg.description),
+            'title': hg.title,
+            'keywords': [k.strip() for k in hg.keywords.split(',')],
+            'qualifications': hg.qualifications,
+            'occurrence_date': hg.occurrence_date,
+            'time_alloted': hg.time_alloted,
+        }
 
 
 def no_cache(view):

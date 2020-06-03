@@ -79,11 +79,11 @@ class Command(CrawlUpdaterCommand):
         the given time period.
 
         """
+        q = "DELETE FROM {0} where start_time BETWEEN '{1}' AND '{2}';"
         for table in ['hits_mv', 'main_crawlagregates']:
             st = time.time()
             self.log.info('Deleting rows from {0} where start_time between {1}'
                 ' and {2}.'.format(table, start, end))
-            q = "DELETE FROM {0} where start_time BETWEEN '{1}' AND '{2}';"
             execute_sql(q.format(table, start, end), commit=True)
             self.log.info('{0}s elapsed.'.format(time.time() - st))
 

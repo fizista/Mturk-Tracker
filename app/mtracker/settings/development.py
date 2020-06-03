@@ -4,7 +4,7 @@ from defaults import *
 TEMPLATE_DEBUG = JS_DEBUG = DEBUG = True
 
 LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
-for log in [l for l in LOGGING['loggers'] if l.startswith('mturk')]:
+for _ in [l for l in LOGGING['loggers'] if l.startswith('mturk')]:
     LOGGING['loggers'][l]['level'] = LOG_LEVEL
 
 DATABASES = {

@@ -17,6 +17,4 @@ def get_config():
         'static_url': settings.STATIC_URL,
     }
 
-    config = 'window.jsconf = %s;' % json.dumps(js_configuration)
-
-    return config
+    return 'window.jsconf = %s;' % json.dumps(js_configuration)

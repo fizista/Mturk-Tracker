@@ -19,5 +19,4 @@ def authenticate(email, password):
     installation of opener with cookie support.
     """
     data = {'action': 'sign-in', 'password': password, 'email': email}
-    resp = urllib2.urlopen(AMAZON_AUTH_URL, urllib.urlencode(data))
-    return resp
+    return urllib2.urlopen(AMAZON_AUTH_URL, urllib.urlencode(data))

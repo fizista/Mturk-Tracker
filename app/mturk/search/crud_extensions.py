@@ -60,13 +60,11 @@ class SearchResource(ModelResource):
 
         """
         # if nothing to map or no mapping is defined, exit
-        if (not orderings or
-            not getattr(self.Meta, 'search_ordering_fields_map')):
+        if not (orderings and getattr(self.Meta, 'search_ordering_fields_map')):
             return orderings
         reverse_map = dict([(v, k) for
             k, v in self.Meta.search_ordering_fields_map.items()])
-        res = self.__convert_ordering(orderings, reverse_map)
-        return res
+        return self.__convert_ordering(orderings, reverse_map)
 
     def get_ordering(self, request):
         """Called to get a list of ordering parameters to pass to the queryset.

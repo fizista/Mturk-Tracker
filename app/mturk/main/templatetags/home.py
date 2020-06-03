@@ -26,11 +26,11 @@ pageTracker._trackPageview();
 @register.simple_tag
 def jquery():
 
-    uncompressed = 'false'
     if settings.DEBUG:
         return """<script src="%sjs/jquery-1.3.2.js"></script>
 <script src="%sjs/jquery-ui-1.7.2.js"></script>""" % (settings.STATIC_URL, settings.STATIC_URL)
     else:
+        uncompressed = 'false'
         return """<script src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">
 google.load("jquery", "1.3.2",{uncompressed:%s});

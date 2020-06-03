@@ -63,8 +63,8 @@ def setup_ssh():
     create_target_directories([ssh_target_dir], "700", user)
 
     # Upload SSH config and keys.
-    # TODO: Add copying files from remote folder (upload_ssh_keys_from_local).
-    if cget('upload_ssh_keys_from_local') or True:
+        # TODO: Add copying files from remote folder (upload_ssh_keys_from_local).
+    if cget('upload_ssh_keys_from_local'):
         files = cget('ssh_files')
         if not files:
             show(yellow("No SSH files to upload."))
@@ -109,11 +109,7 @@ def fetch_project_code():
     repo_dir = pjoin(project_dir, "code")
     url = cget("source_url")
     user = cget("user")
-    if commit:
-        rev = commit
-    else:
-        rev = "origin/%s" % (branch or "master")
-
+    rev = commit if commit else "origin/%s" % (branch or "master")
     with settings(sudo_prefix=SUDO_PREFIX):
         if not dir_exists(pjoin(repo_dir, ".git")):
             show(yellow("Cloning repository following: %s"), rev)
@@ -315,7 +311,7 @@ def update_args(ctx, instance, branch, commit, locals_path, requirements,
     """Check args and update ctx."""
     # Do the sanity checks.
     instance = cset("instance", instance)
-    if not instance or not instance.isalnum():
+    if not (instance and instance.isalnum()):
         abort("You have to specify a proper alphanumeric instance name!")
     if branch is not None and commit is not None:
         abort("You can only deploy specific commit OR specific branch")

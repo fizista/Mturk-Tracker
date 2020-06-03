@@ -45,13 +45,12 @@ def google_timeline(context, columns, data, multirow=False, adjust_zoom=False):
     '''
     http://code.google.com/apis/visualization/documentation/gallery/annotatedtimeline.html
     '''
-    ctx = {
-            'data': row_formater(data),
-            'columns': columns,
-            'multichart': context.get('multichart', False),
-            'adjust_zoom': adjust_zoom,
-        }
-    return ctx
+    return {
+                'data': row_formater(data),
+                'columns': columns,
+                'multichart': context.get('multichart', False),
+                'adjust_zoom': adjust_zoom,
+            }
 
 
 @register.inclusion_tag('graphs/google_table.html', takes_context=True)

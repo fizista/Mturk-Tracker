@@ -38,9 +38,8 @@ class TrainCommand(BaseCommand):
         classifier = NaiveBayesClassifier(training_set=training_set)
         output_path = options['classifier_path']
         if output_path:
-            with open(options['classifier_path'], 'w') as file:
-                json.dump(classifier.probabilities, file,
-                          ensure_ascii=True, indent=4)
+            with open(output_path, 'w') as file:
+                json.dump(classifier.probabilities, file, ensure_ascii=True, indent=4)
         else:
             json.dump(classifier.probabilities, sys.stdout,
                       ensure_ascii=True, indent=4)
